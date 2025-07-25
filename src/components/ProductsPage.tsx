@@ -3,14 +3,18 @@ import { motion } from "framer-motion";
 import { ProductsWithLoading } from "./ProductsWithLoading";
 import { FilterBar } from "./FilterBar";
 import { AnimatedBackground } from "./AnimatedBackground";
-import { useProductsWithLoading, useCategoriesWithLoading } from "../hooks/useProducts";
+import {
+  useProductsWithLoading,
+  useCategoriesWithLoading,
+} from "../hooks/useProducts";
 import { LoadingSpinner } from "./LoadingSpinner";
 import type { FilterState } from "../types";
 
 export const ProductsPage: React.FC = () => {
-  const { isLoading: productsLoading, hasError: productsError } = useProductsWithLoading();
-  const { categories, isLoading: categoriesLoading } = useCategoriesWithLoading();
-  
+  const { hasError: productsError } = useProductsWithLoading();
+  const { categories, isLoading: categoriesLoading } =
+    useCategoriesWithLoading();
+
   const [filters, setFilters] = useState<FilterState>({
     category: "",
     searchTerm: "",
@@ -39,7 +43,7 @@ export const ProductsPage: React.FC = () => {
   return (
     <div className="min-h-screen relative overflow-hidden">
       <AnimatedBackground />
-      
+
       <motion.main
         className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
         initial={{ opacity: 0 }}

@@ -1,15 +1,17 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Cart, CartProduct } from '../types';
-import { apiService } from '../services/api';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Cart } from "../types";
+import { apiService } from "../services/api";
 
 // Query keys for cart-related data
 export const cartQueryKeys = {
-  all: ['carts'] as const,
-  lists: () => [...cartQueryKeys.all, 'list'] as const,
-  list: (filters: Record<string, unknown>) => [...cartQueryKeys.lists(), { filters }] as const,
-  details: () => [...cartQueryKeys.all, 'detail'] as const,
+  all: ["carts"] as const,
+  lists: () => [...cartQueryKeys.all, "list"] as const,
+  list: (filters: Record<string, unknown>) =>
+    [...cartQueryKeys.lists(), { filters }] as const,
+  details: () => [...cartQueryKeys.all, "detail"] as const,
   detail: (id: number) => [...cartQueryKeys.details(), id] as const,
-  userCarts: (userId: number) => [...cartQueryKeys.all, 'user', userId] as const,
+  userCarts: (userId: number) =>
+    [...cartQueryKeys.all, "user", userId] as const,
 };
 
 // Hook to get user's carts with caching
@@ -57,20 +59,20 @@ export const useCreateCartMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (cart: Omit<Cart, 'id'>) => apiService.createCart(cart),
+    mutationFn: (cart: Omit<Cart, "id">) => apiService.createCart(cart),
     onSuccess: (data, variables) => {
       // Invalidate user carts to refresh the list
-      queryClient.invalidateQueries({ 
-        queryKey: cartQueryKeys.userCarts(variables.userId) 
+      queryClient.invalidateQueries({
+        queryKey: cartQueryKeys.userCarts(variables.userId),
       });
-      
+
       // Add the new cart to the cache
       queryClient.setQueryData(cartQueryKeys.detail(data.id), data);
-      
-      console.log('Cart created successfully:', data);
+
+      console.log("Cart created successfully:", data);
     },
     onError: (error) => {
-      console.error('Failed to create cart:', error);
+      console.error("Failed to create cart:", error);
     },
   });
 };
@@ -80,23 +82,23 @@ export const useUpdateCartMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ cartId, cart }: { cartId: number; cart: Partial<Cart> }) => 
+    mutationFn: ({ cartId, cart }: { cartId: number; cart: Partial<Cart> }) =>
       apiService.updateCart(cartId, cart),
     onSuccess: (data, variables) => {
       // Update the cart in cache
       queryClient.setQueryData(cartQueryKeys.detail(variables.cartId), data);
-      
+
       // Invalidate user carts to refresh the list
       if (data.userId) {
-        queryClient.invalidateQueries({ 
-          queryKey: cartQueryKeys.userCarts(data.userId) 
+        queryClient.invalidateQueries({
+          queryKey: cartQueryKeys.userCarts(data.userId),
         });
       }
-      
-      console.log('Cart updated successfully:', data);
+
+      console.log("Cart updated successfully:", data);
     },
     onError: (error) => {
-      console.error('Failed to update cart:', error);
+      console.error("Failed to update cart:", error);
     },
   });
 };
@@ -110,18 +112,18 @@ export const useDeleteCartMutation = () => {
     onSuccess: (data, cartId) => {
       // Remove the cart from cache
       queryClient.removeQueries({ queryKey: cartQueryKeys.detail(cartId) });
-      
+
       // Invalidate user carts to refresh the list
       if (data.userId) {
-        queryClient.invalidateQueries({ 
-          queryKey: cartQueryKeys.userCarts(data.userId) 
+        queryClient.invalidateQueries({
+          queryKey: cartQueryKeys.userCarts(data.userId),
         });
       }
-      
-      console.log('Cart deleted successfully:', data);
+
+      console.log("Cart deleted successfully:", data);
     },
     onError: (error) => {
-      console.error('Failed to delete cart:', error);
+      console.error("Failed to delete cart:", error);
     },
   });
 };
@@ -154,7 +156,9 @@ export const useInvalidateCartCache = () => {
   const queryClient = useQueryClient();
 
   const invalidateUserCarts = (userId: number) => {
-    queryClient.invalidateQueries({ queryKey: cartQueryKeys.userCarts(userId) });
+    queryClient.invalidateQueries({
+      queryKey: cartQueryKeys.userCarts(userId),
+    });
   };
 
   const invalidateCart = (cartId: number) => {

@@ -1,13 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import type { User, LoginData, RegisterData } from '../types';
-import { apiService } from '../services/api';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { LoginData, RegisterData } from "../types";
+import { apiService } from "../services/api";
 
 // Query keys for user-related data
 export const userQueryKeys = {
-  all: ['users'] as const,
-  lists: () => [...userQueryKeys.all, 'list'] as const,
-  list: (filters: Record<string, unknown>) => [...userQueryKeys.lists(), { filters }] as const,
-  details: () => [...userQueryKeys.all, 'detail'] as const,
+  all: ["users"] as const,
+  lists: () => [...userQueryKeys.all, "list"] as const,
+  list: (filters: Record<string, unknown>) =>
+    [...userQueryKeys.lists(), { filters }] as const,
+  details: () => [...userQueryKeys.all, "detail"] as const,
   detail: (id: number) => [...userQueryKeys.details(), id] as const,
 };
 
@@ -56,15 +57,15 @@ export const useLoginMutation = () => {
 
   return useMutation({
     mutationFn: (credentials: LoginData) => apiService.loginUser(credentials),
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       // Invalidate user queries to refresh user data
       queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
-      
+
       // You can add additional success logic here if needed
-      console.log('Login successful:', data);
+      console.log("Login successful:", data);
     },
     onError: (error) => {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
     },
   });
 };
@@ -75,14 +76,14 @@ export const useRegisterMutation = () => {
 
   return useMutation({
     mutationFn: (userData: RegisterData) => apiService.registerUser(userData),
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       // Invalidate user queries to refresh user data
       queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
-      
-      console.log('Registration successful:', data);
+
+      console.log("Registration successful:", data);
     },
     onError: (error) => {
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
     },
   });
 };

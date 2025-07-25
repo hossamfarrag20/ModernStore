@@ -1,16 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-import type { Product } from '../types';
-import { apiService } from '../services/api';
+import { useQuery } from "@tanstack/react-query";
+// import type { Product } from '../types'; // TODO: Use when implementing product mutations
+import { apiService } from "../services/api";
 
 // Query keys for consistent cache management
 export const productQueryKeys = {
-  all: ['products'] as const,
-  lists: () => [...productQueryKeys.all, 'list'] as const,
-  list: (filters: Record<string, unknown>) => [...productQueryKeys.lists(), { filters }] as const,
-  details: () => [...productQueryKeys.all, 'detail'] as const,
+  all: ["products"] as const,
+  lists: () => [...productQueryKeys.all, "list"] as const,
+  list: (filters: Record<string, unknown>) =>
+    [...productQueryKeys.lists(), { filters }] as const,
+  details: () => [...productQueryKeys.all, "detail"] as const,
   detail: (id: number) => [...productQueryKeys.details(), id] as const,
-  categories: () => [...productQueryKeys.all, 'categories'] as const,
-  byCategory: (category: string) => [...productQueryKeys.all, 'category', category] as const,
+  categories: () => [...productQueryKeys.all, "categories"] as const,
+  byCategory: (category: string) =>
+    [...productQueryKeys.all, "category", category] as const,
 };
 
 // Hook to get all products with caching
@@ -93,7 +95,8 @@ export const useProductsByCategory = (category: string) => {
 
 // Enhanced hooks with additional utilities (maintaining backward compatibility)
 export const useProductsWithLoading = () => {
-  const { products, loading, error, isLoading, isFetching, refetch } = useProducts();
+  const { products, loading, error, isLoading, isFetching, refetch } =
+    useProducts();
 
   return {
     products,
@@ -109,7 +112,8 @@ export const useProductsWithLoading = () => {
 };
 
 export const useCategoriesWithLoading = () => {
-  const { categories, loading, error, isLoading, isFetching, refetch } = useCategories();
+  const { categories, loading, error, isLoading, isFetching, refetch } =
+    useCategories();
 
   return {
     categories,

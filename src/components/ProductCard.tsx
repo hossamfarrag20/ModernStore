@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { Star, Heart, ShoppingCart, Check, Sparkles } from "lucide-react";
+import { Star, ShoppingCart, Check, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import type { Product } from "../types";
@@ -15,12 +15,10 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = React.memo(
   ({ product, index }) => {
     const [imageLoaded, setImageLoaded] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
     const [addedToCart, setAddedToCart] = useState(false);
     const cardRef = useRef<HTMLDivElement>(null);
     const cartButtonRef = useRef<HTMLButtonElement>(null);
-    const likeButtonRef = useRef<HTMLButtonElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const { addToCart, cartItems } = useCart();
     const { isAuthenticated } = useAuth();
@@ -142,28 +140,6 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(
     // Check if product is already in cart
     const isInCart = cartItems.some((item) => item.id === product.id);
     const cartItem = cartItems.find((item) => item.id === product.id);
-
-    const handleLikeClick = () => {
-      setIsLiked(!isLiked);
-
-      if (likeButtonRef.current) {
-        // Heart beat animation
-        gsap.to(likeButtonRef.current, {
-          scale: 1.3,
-          duration: 0.2,
-          ease: "power2.out",
-          yoyo: true,
-          repeat: 1,
-        });
-
-        // Rotate animation
-        gsap.to(likeButtonRef.current, {
-          rotation: 360,
-          duration: 0.6,
-          ease: "power2.out",
-        });
-      }
-    };
 
     return (
       <motion.div

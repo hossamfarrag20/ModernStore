@@ -1,26 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { gsap } from "gsap";
 import {
   Star,
   ShoppingCart,
-  Heart,
   ArrowLeft,
   Plus,
   Minus,
   Check,
   Loader,
   Sparkles,
-  Eye,
-  Share2,
 } from "lucide-react";
 import { useProduct, useProductsByCategory } from "../hooks/useProducts";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 import { AnimatedBackground } from "./AnimatedBackground";
-
-import type { Product } from "../types";
 
 export const ProductDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,7 +32,7 @@ export const ProductDetailsPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  // const [isLiked, setIsLiked] = useState(false); // TODO: Implement wishlist functionality
 
   // Refs for animations
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,10 +74,6 @@ export const ProductDetailsPage: React.FC = () => {
     if (newQuantity >= 1) {
       setQuantity(newQuantity);
     }
-  };
-
-  const toggleLike = () => {
-    setIsLiked(!isLiked);
   };
 
   const formatPrice = (price: number) => {

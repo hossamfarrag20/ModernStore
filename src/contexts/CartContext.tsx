@@ -12,8 +12,8 @@ import { useAuth } from "./AuthContext";
 import {
   useCreateCartMutation,
   useUpdateCartMutation,
-  useDeleteCartMutation,
-  useInvalidateCartCache,
+  // useDeleteCartMutation, // TODO: Import when implementing cart deletion
+  // useInvalidateCartCache, // TODO: Import when implementing cache invalidation
 } from "../hooks/useCartQueries";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -32,8 +32,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   // React Query mutations for optimized cart operations
   const createCartMutation = useCreateCartMutation();
   const updateCartMutation = useUpdateCartMutation();
-  const deleteCartMutation = useDeleteCartMutation();
-  const { invalidateUserCarts } = useInvalidateCartCache();
+  // const deleteCartMutation = useDeleteCartMutation(); // TODO: Implement cart deletion
+  // const { invalidateUserCarts } = useInvalidateCartCache(); // TODO: Implement cache invalidation
 
   // Load cart when user changes
   useEffect(() => {
