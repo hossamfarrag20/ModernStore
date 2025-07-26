@@ -85,6 +85,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           // Convert cart products to cart items with quantity
           const items: CartItem[] = latestCart.products.map((product) => ({
             ...product,
+            id: product.productId || product.id, // Handle both productId (API) and id (local)
             quantity: product.quantity || 1,
             rating: { rate: 0, count: 0 }, // Default rating for cart items
           }));
@@ -168,7 +169,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         // Also try to save to API using React Query mutations
         try {
           const cartProducts: CartProduct[] = newCartItems.map((item) => ({
-            id: item.id,
+            productId: item.id, // Use productId for API compatibility
             title: item.title,
             price: item.price,
             description: item.description,
@@ -239,7 +240,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       if (isAuthenticated && user && cart) {
         try {
           const cartProducts: CartProduct[] = newCartItems.map((item) => ({
-            id: item.id,
+            productId: item.id, // Use productId for API compatibility
             title: item.title,
             price: item.price,
             description: item.description,
@@ -289,7 +290,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       if (isAuthenticated && user && cart) {
         try {
           const cartProducts: CartProduct[] = newCartItems.map((item) => ({
-            id: item.id,
+            productId: item.id, // Use productId for API compatibility
             title: item.title,
             price: item.price,
             description: item.description,
